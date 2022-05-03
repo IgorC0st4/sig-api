@@ -15,7 +15,8 @@ servidor.use(express.urlencoded({ extended: true }));
 
 servidor.use('/usuarios', usuariosRota);
 
-servidor.use((error, req, res) => {
+// eslint-disable-next-line no-unused-vars
+servidor.use((error, req, res, next) => {
   let status = 500;
   if (error instanceof CampoInvalido
     || error instanceof SemValores) {

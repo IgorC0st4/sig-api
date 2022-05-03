@@ -43,7 +43,11 @@ router.post('/registrar', async (req, res, next) => {
     const usuarioModelo = new UsuariosModelo(valoresRegistro);
 
     await usuarioModelo.inserir();
-    res.status(200);
+    const resultadoConsulta = await usuarioModelo.buscar([], ['email']);
+    console.log({ resultadoConsulta });
+    const resposta = resultadoConsulta[0];
+    res.status(201);
+    res.json(Object.assign(resposta, { senha: '' }));
   } catch (error) {
     console.error(error);
     next(error);

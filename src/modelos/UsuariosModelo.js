@@ -81,7 +81,7 @@ class UsuariosModelo {
   }
 
   validar() {
-    const campos = ['email, senha', 'telefone'];
+    const campos = ['email', 'senha', 'telefone'];
     campos.forEach((campo) => {
       const valor = this[campo];
       if (typeof valor !== 'string' || valor.trim().length === 0) {

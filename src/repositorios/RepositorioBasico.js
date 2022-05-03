@@ -13,7 +13,7 @@ class RepositorioBasico {
       valoresWildCards.join(','),
       ');',
     ];
-    await executarConsulta(sql.join(' '), valores);
+    return executarConsulta(sql.join(' '), valores);
   }
 
   async buscar(
