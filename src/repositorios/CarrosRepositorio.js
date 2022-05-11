@@ -7,18 +7,20 @@ class CarrosRepositorio extends RepositorioBasico {
   }
 
   salvar({
-    tamanho, cor, placa, idDono,
+    tamanho, cor, placa, modelo, idDono,
   }) {
     const colunas = [
       'tamanho',
       'cor',
       'placa',
+      'modelo',
       'idDono',
     ];
     const valores = [
       tamanho,
       cor,
       placa,
+      modelo,
       idDono,
     ];
     return this.inserir(colunas, valores);

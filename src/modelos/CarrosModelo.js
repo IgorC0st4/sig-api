@@ -4,12 +4,13 @@ const SemValores = require('../erros/SemValores');
 
 class CarrosModelo {
   constructor({
-    id, tamanho, cor, placa, idDono,
+    id, tamanho, cor, placa, modelo, idDono,
   }) {
     this.id = id;
     this.tamanho = tamanho;
     this.cor = cor;
     this.placa = placa;
+    this.modelo = modelo;
     this.idDono = idDono;
   }
 
@@ -19,6 +20,7 @@ class CarrosModelo {
       tamanho: this.tamanho,
       cor: this.cor,
       placa: this.placa,
+      modelo: this.modelo,
       idDono: this.idDono,
     };
     return repositorio.salvar(valoresParaSalvar);
@@ -49,9 +51,7 @@ class CarrosModelo {
 
   async atualizar() {
     const campos = [
-      'tamanho',
       'cor',
-      'placa',
     ];
 
     const valoresParaAtualizar = {};
@@ -74,7 +74,7 @@ class CarrosModelo {
   }
 
   validar() {
-    const campos = ['tamanho', 'cor', 'placa', 'idDono'];
+    const campos = ['tamanho', 'cor', 'placa', 'modelo', 'idDono'];
     campos.forEach((campo) => {
       const valor = this[campo];
       if (typeof valor === 'string' && valor.trim().length === 0) {

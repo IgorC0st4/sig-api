@@ -18,6 +18,7 @@ const criarTabelaCarros = () => {
         tamanho ENUM('PEQUENO','MEDIO', 'GRANDE') NOT NULL,
         cor VARCHAR(30) NOT NULL,
         placa VARCHAR(30) NOT NULL UNIQUE,
+        modelo VARCHAR(255) NOT NULL,
         idDono INT NOT NULL,
         FOREIGN KEY (idDono) 
             REFERENCES usuarios (id) 
@@ -57,7 +58,7 @@ const criarTabelaAgendamentos = () => {
         id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
         orcamento FLOAT NOT NULL,
         dataMarcada DATETIME NOT NULL,
-        idCarro INT DEFAULT NULL,
+        idCarro INT NOT NULL,
         FOREIGN KEY (idCarro) 
             REFERENCES carros (id) 
             ON DELETE CASCADE 
@@ -85,13 +86,13 @@ const criarTabelaAgendamentoServicos = () => {
   return executarConsulta(sql);
 };
 
-const criarTabelas = () => Promise.all([
-  criarTabelaUsuarios(),
-  criarTabelaCarros(),
-  criarTabelaServicos(),
-  criarTabelaVariacoes(),
-  criarTabelaAgendamentos(),
-  criarTabelaAgendamentoServicos(),
-]);
+const criarTabelas = async () => {
+  await criarTabelaUsuarios();
+  await criarTabelaCarros();
+  await criarTabelaServicos();
+  await criarTabelaVariacoes();
+  await criarTabelaAgendamentos();
+  await criarTabelaAgendamentoServicos();
+};
 
 module.exports = criarTabelas;
