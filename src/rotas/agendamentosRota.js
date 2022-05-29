@@ -1,6 +1,8 @@
 const router = require('express').Router();
+const { DateTime } = require('luxon');
 const AgendamentosModelo = require('../modelos/AgendamentosModelo');
 const NaoEncontrado = require('../erros/NaoEncontrado');
+const { listarEventosNoIntervalo, inserirNovoEvento } = require('../google/googleCalendar');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -27,6 +29,42 @@ router.get('/', async (req, res, next) => {
       res.status(200);
       res.json(resultadoConsulta);
     }
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.get('/calendario', async (req, res, next) => {
+  try {
+    const {
+      diaDeInteresse = new Date(),
+    } = req.query;
+
+    const inicio = DateTime.fromJSDate(diaDeInteresse).startOf('day').plus({ hours: 8 });
+    const fim = DateTime.fromJSDate(diaDeInteresse).endOf('day').minus({ hours: 5, minutes: 59 });
+
+    const { data } = await listarEventosNoIntervalo(inicio.toJSDate(), fim.toJSDate());
+
+    res.status(200);
+    res.json(data.items);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.post('/calendario', async (req, res, next) => {
+  try {
+    const {
+      diaDeInteresse = new Date(),
+    } = req.query;
+
+    const inicio = DateTime.fromJSDate(diaDeInteresse).startOf('day').plus({ hours: 8 });
+    const fim = DateTime.fromJSDate(diaDeInteresse).endOf('day').minus({ hours: 5, minutes: 59 });
+
+    res.status(200);
+    res.json({ inicio: inicio.toString(), fim: fim.toString() });
   } catch (error) {
     console.error(error);
     next(error);
