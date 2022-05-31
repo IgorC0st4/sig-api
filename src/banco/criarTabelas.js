@@ -32,7 +32,8 @@ const criarTabelaCarros = () => {
 const criarTabelaServicos = () => {
   const sql = `CREATE TABLE IF NOT EXISTS servicos (
         id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-        nome VARCHAR(50) NOT NULL
+        nome VARCHAR(50) NOT NULL,
+        duracao INT NOT NULL
     );`;
 
   return executarConsulta(sql);
@@ -58,6 +59,8 @@ const criarTabelaAgendamentos = () => {
         id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
         orcamento FLOAT NOT NULL,
         dataMarcada DATETIME NOT NULL,
+        situacao ENUM('MARCADO','FINALIZADO', 'CANCELADO') DEFAULT 'MARCADO' NOT NULL,
+        idEventoCalendario VARCHAR(255) NOT NULL UNIQUE,
         idCarro INT NOT NULL,
         FOREIGN KEY (idCarro) 
             REFERENCES carros (id) 

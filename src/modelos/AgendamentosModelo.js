@@ -4,11 +4,14 @@ const SemValores = require('../erros/SemValores');
 
 class AgendamentosModelo {
   constructor({
-    id, orcamento, dataMarcada, idCarro,
+    id, orcamento, dataMarcada,
+    idEventoCalendario, situacao, idCarro,
   }) {
     this.id = id;
     this.orcamento = orcamento;
     this.dataMarcada = dataMarcada;
+    this.idEventoCalendario = idEventoCalendario;
+    this.situacao = situacao;
     this.idCarro = idCarro;
   }
 
@@ -17,6 +20,7 @@ class AgendamentosModelo {
     const valoresParaSalvar = {
       orcamento: this.orcamento,
       dataMarcada: this.dataMarcada,
+      idEventoCalendario: this.idEventoCalendario,
       idCarro: this.idCarro,
     };
     return repositorio.salvar(valoresParaSalvar);
@@ -49,6 +53,7 @@ class AgendamentosModelo {
     const campos = [
       'orcamento',
       'dataMarcada',
+      'situacao',
     ];
 
     const valoresParaAtualizar = {};

@@ -12,6 +12,7 @@ class AgendamentosRepositorio extends RepositorioBasico {
     const colunas = [
       'orcamento',
       'dataMarcada',
+      'idEventoCalendario',
       'idCarro',
     ];
     const valores = [

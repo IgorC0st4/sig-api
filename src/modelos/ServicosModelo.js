@@ -4,16 +4,18 @@ const SemValores = require('../erros/SemValores');
 
 class ServicosModelo {
   constructor({
-    id, nome,
+    id, nome, duracao,
   }) {
     this.id = id;
     this.nome = nome;
+    this.duracao = duracao;
   }
 
   async inserir() {
     this.validar();
     const valoresParaSalvar = {
       nome: this.nome,
+      duracao: this.duracao,
     };
     return repositorio.salvar(valoresParaSalvar);
   }
@@ -66,10 +68,13 @@ class ServicosModelo {
   }
 
   validar() {
-    const campos = ['nome'];
+    const campos = ['nome', 'duracao'];
     campos.forEach((campo) => {
       const valor = this[campo];
-      if (typeof valor !== 'string' || valor.trim().length === 0) {
+      if (typeof valor === 'string' && valor.trim().length === 0) {
+        throw new CampoInvalido(campo);
+      }
+      if (typeof valor === 'number' && valor <= 0) {
         throw new CampoInvalido(campo);
       }
     });
