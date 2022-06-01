@@ -1,4 +1,5 @@
 const RepositorioBasico = require('./RepositorioBasico');
+const executarConsulta = require('../banco/executarConsulta');
 
 class VariacoesRepositorio extends RepositorioBasico {
   constructor() {
@@ -20,6 +21,18 @@ class VariacoesRepositorio extends RepositorioBasico {
       idServico,
     ];
     return this.inserir(colunas, valores);
+  }
+
+  async buscarParaAgendamento(tamanho) {
+    const sql = `
+    SELECT S.nome AS nomeServico, S.duracao AS duracaoServico, V.id AS idVariacao, V.valor
+    FROM servicos AS S
+    INNER JOIN variacoes AS V
+    ON S.id = V.idServico
+    WHERE V.tamanho = ?;
+    `;
+    const resultado = await executarConsulta(sql, [tamanho]);
+    return resultado[0];
   }
 }
 

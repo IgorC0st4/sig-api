@@ -73,6 +73,10 @@ class VariacoesModelo {
     );
   }
 
+  buscarParaAgendamento() {
+    return repositorio.buscarParaAgendamento(this.tamanho);
+  }
+
   validar() {
     const campos = ['valor', 'tamanho', 'idServico'];
     campos.forEach((campo) => {

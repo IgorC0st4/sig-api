@@ -33,6 +33,20 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+router.get('/agendamento', async (req, res, next) => {
+  try {
+    const { tamanho } = req.query;
+    const variacaoModelo = new VariacoesModelo({ tamanho });
+    const resultadoConsulta = await variacaoModelo.buscarParaAgendamento();
+    console.log({ resultadoConsulta });
+    res.status(200);
+    res.json(resultadoConsulta);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 router.post('/', async (req, res, next) => {
   try {
     const valoresRegistro = req.body;
