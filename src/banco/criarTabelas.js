@@ -3,6 +3,7 @@ const executarConsulta = require('./executarConsulta');
 const criarTabelaUsuarios = () => {
   const sql = `CREATE TABLE IF NOT EXISTS usuarios (
         id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+        nome VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL UNIQUE,
         senha VARCHAR(255) NOT NULL,
         tipo ENUM('CLIENTE','ADMIN') DEFAULT 'CLIENTE' NOT NULL,

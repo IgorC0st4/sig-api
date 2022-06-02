@@ -6,13 +6,17 @@ class UsuariosRepositorio extends RepositorioBasico {
     this.nomeTabela = 'usuarios';
   }
 
-  salvar({ email, senha, telefone }) {
+  salvar({
+    nome, email, senha, telefone,
+  }) {
     const colunas = [
+      'nome',
       'email',
       'senha',
       'telefone',
     ];
     const valores = [
+      nome,
       email,
       senha,
       telefone,

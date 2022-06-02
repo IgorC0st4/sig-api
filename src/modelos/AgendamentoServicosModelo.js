@@ -1,7 +1,7 @@
-const repositorio = require('../repositorios/AgendamentosRepositorio');
+const repositorio = require('../repositorios/AgendamentoServicosRepositorio');
 const CampoInvalido = require('../erros/CampoInvalido');
 
-class AgendamentosModelo {
+class AgendamentosServicosModelo {
   constructor({
     id, idAgendamento, idVariacao,
   }) {
@@ -14,7 +14,7 @@ class AgendamentosModelo {
     this.validar();
     const valoresParaSalvar = {
       idAgendamento: this.idAgendamento,
-      idvariacao: this.idVariacao,
+      idVariacao: this.idVariacao,
     };
     return repositorio.salvar(valoresParaSalvar);
   }
@@ -53,4 +53,4 @@ class AgendamentosModelo {
   }
 }
 
-module.exports = AgendamentosModelo;
+module.exports = AgendamentosServicosModelo;

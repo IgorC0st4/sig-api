@@ -1,4 +1,5 @@
 const RepositorioBasico = require('./RepositorioBasico');
+const executarConsulta = require('../banco/executarConsulta');
 
 class AgendamentosRepositorio extends RepositorioBasico {
   constructor() {
@@ -7,7 +8,7 @@ class AgendamentosRepositorio extends RepositorioBasico {
   }
 
   salvar({
-    orcamento, dataMarcada, idCarro,
+    orcamento, dataMarcada, idEventoCalendario, idCarro,
   }) {
     const colunas = [
       'orcamento',
@@ -18,9 +19,21 @@ class AgendamentosRepositorio extends RepositorioBasico {
     const valores = [
       orcamento,
       dataMarcada,
+      idEventoCalendario,
       idCarro,
     ];
     return this.inserir(colunas, valores);
+  }
+
+  async buscarParaUsuario(idUsuario) {
+    const sql = `
+      SELECT A.*
+      FROM agendamentos AS A
+      INNER JOIN carros AS C ON C.id = A.idCarro
+      WHERE C.idDono = ?;
+    `;
+    const resultadoConsulta = await executarConsulta(sql, [idUsuario]);
+    return resultadoConsulta[0];
   }
 }
 

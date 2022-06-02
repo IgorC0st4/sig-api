@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const { DateTime } = require('luxon');
 const AgendamentosModelo = require('../modelos/AgendamentosModelo');
+const AgendamentoServicosModelo = require('../modelos/AgendamentoServicosModelo');
+const UsuariosModelo = require('../modelos/UsuariosModelo');
 const NaoEncontrado = require('../erros/NaoEncontrado');
 const { listarEventosNoIntervalo, inserirNovoEvento } = require('../google/googleCalendar');
 
@@ -34,53 +36,82 @@ router.get('/', async (req, res, next) => {
     next(error);
   }
 });
-
-router.get('/calendario', async (req, res, next) => {
+router.get('/usuario', async (req, res, next) => {
   try {
     const {
-      diaDeInteresse = new Date(),
+      idUsuario,
     } = req.query;
 
-    const inicio = DateTime.fromJSDate(diaDeInteresse).startOf('day').plus({ hours: 8 });
-    const fim = DateTime.fromJSDate(diaDeInteresse).endOf('day').minus({ hours: 5, minutes: 59 });
-
-    const { data } = await listarEventosNoIntervalo(inicio.toJSDate(), fim.toJSDate());
+    const agendamentoModelo = new AgendamentosModelo({});
+    const resultadoConsulta = await agendamentoModelo.buscarParaUsuario(idUsuario);
 
     res.status(200);
-    res.json(data.items);
+    if (!resultadoConsulta) {
+      res.json([]);
+    } else {
+      res.json(resultadoConsulta);
+    }
   } catch (error) {
     console.error(error);
     next(error);
   }
 });
-
-router.post('/calendario', async (req, res, next) => {
-  try {
-    const {
-      diaDeInteresse = new Date(),
-    } = req.query;
-
-    const inicio = DateTime.fromJSDate(diaDeInteresse).startOf('day').plus({ hours: 8 });
-    const fim = DateTime.fromJSDate(diaDeInteresse).endOf('day').minus({ hours: 5, minutes: 59 });
-
-    res.status(200);
-    res.json({ inicio: inicio.toString(), fim: fim.toString() });
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-});
-
 router.post('/', async (req, res, next) => {
   try {
-    const valoresRegistro = req.body;
-    const agendamentoModelo = new AgendamentosModelo(valoresRegistro);
+    const {
+      dataSelecionada,
+      carroSelecionado,
+      servicosSelecionados,
+      orcamento,
+      horasServico,
+    } = req.body;
+
+    let usuarioModelo = new UsuariosModelo({ id: carroSelecionado.idDono });
+    const resultadoConsulta = await usuarioModelo.buscar([], ['id']);
+    usuarioModelo = new UsuariosModelo(resultadoConsulta[0]);
+    const tempData = new Date(dataSelecionada);
+    const inicioDoEvento = DateTime
+      .fromISO(tempData.toISOString())
+      .startOf('day')
+      .plus({ hours: 8 });
+    const fimDoEvento = DateTime
+      .fromJSDate(inicioDoEvento.toJSDate())
+      .plus({ hours: horasServico });
+    const descricao = servicosSelecionados.map((servico) => servico.nomeServico);
+    descricao.push(`Orçamento: ${orcamento}`);
+    descricao.push(`Horas de servico: ${horasServico}`);
+    descricao.push(`Telefone: ${usuarioModelo.telefone}`);
+    const resultadoInserirNovoEnvento = await inserirNovoEvento(
+      inicioDoEvento.toJSDate(),
+      fimDoEvento.toJSDate(),
+      descricao.join('\n'),
+      usuarioModelo.nome,
+      { nome: usuarioModelo.nome, email: usuarioModelo.email },
+    );
+    const eventoSalvo = resultadoInserirNovoEnvento.data;
+    let agendamentoModelo = new AgendamentosModelo({
+      dataMarcada: inicioDoEvento.toJSDate(),
+      idCarro: carroSelecionado.id,
+      orcamento,
+      idEventoCalendario: eventoSalvo.id,
+    });
 
     await agendamentoModelo.inserir();
-    const resultadoConsulta = await agendamentoModelo.buscar([], ['idCarro'], 'id', 'DESC', 1);
-    const resposta = resultadoConsulta[0];
-    res.status(201);
-    res.json(resposta);
+    const resultadoConsultaAgendamento = await agendamentoModelo.buscar([], ['idEventoCalendario']);
+    agendamentoModelo = new AgendamentosModelo(resultadoConsultaAgendamento[0]);
+
+    const promisses = servicosSelecionados.map((servico) => {
+      console.log(servico);
+      const agendamentoServico = new AgendamentoServicosModelo({
+        idAgendamento: agendamentoModelo.id,
+        idVariacao: servico.idVariacao,
+      });
+      return agendamentoServico.inserir();
+    });
+
+    await Promise.all(promisses);
+    res.status(200);
+    res.end();
   } catch (error) {
     console.error(error);
     next(error);

@@ -49,6 +49,10 @@ class AgendamentosModelo {
     );
   }
 
+  buscarParaUsuario(idUsuario) {
+    return repositorio.buscarParaUsuario(idUsuario);
+  }
+
   async atualizar() {
     const campos = [
       'orcamento',

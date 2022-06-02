@@ -5,9 +5,10 @@ const SemValores = require('../erros/SemValores');
 
 class UsuariosModelo {
   constructor({
-    id, email, senha, tipo, telefone,
+    id, nome, email, senha, tipo, telefone,
   }) {
     this.id = id;
+    this.nome = nome;
     this.email = email;
     this.senha = senha;
     this.tipo = tipo;
@@ -18,6 +19,7 @@ class UsuariosModelo {
     this.validar();
     const senhaEncriptada = await encriptar(this.senha);
     const valoresParaSalvar = {
+      nome: this.nome,
       email: this.email,
       senha: senhaEncriptada,
       telefone: this.telefone,
@@ -81,7 +83,7 @@ class UsuariosModelo {
   }
 
   validar() {
-    const campos = ['email', 'senha', 'telefone'];
+    const campos = ['nome', 'email', 'senha', 'telefone'];
     campos.forEach((campo) => {
       const valor = this[campo];
       if (typeof valor !== 'string' || valor.trim().length === 0) {
