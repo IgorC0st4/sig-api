@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { DateTime } = require('luxon');
 const AgendamentosModelo = require('../modelos/AgendamentosModelo');
 const AgendamentoServicosModelo = require('../modelos/AgendamentoServicosModelo');
+const CarrosModelo = require('../modelos/CarrosModelo');
 const UsuariosModelo = require('../modelos/UsuariosModelo');
 const NaoEncontrado = require('../erros/NaoEncontrado');
 const { listarEventosNoIntervalo, inserirNovoEvento } = require('../google/googleCalendar');
@@ -36,6 +37,7 @@ router.get('/', async (req, res, next) => {
     next(error);
   }
 });
+
 router.get('/usuario', async (req, res, next) => {
   try {
     const {
@@ -56,6 +58,55 @@ router.get('/usuario', async (req, res, next) => {
     next(error);
   }
 });
+
+router.get('/admin', async (req, res, next) => {
+  try {
+    const agendamentoModelo = new AgendamentosModelo({});
+    const resultadoConsulta = await agendamentoModelo.buscarParaAdmin();
+
+    res.status(200);
+    if (!resultadoConsulta) {
+      res.json([]);
+    } else {
+      res.json(resultadoConsulta);
+    }
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+// dataMarcada, carro, servicos, orcamento, horasServico
+router.get('/usuario/detalhes', async (req, res, next) => {
+  try {
+    const {
+      idAgendamento,
+    } = req.query;
+
+    const resposta = {};
+    let agendamentoModelo = new AgendamentosModelo({ id: idAgendamento });
+    let resultadoConsulta = await agendamentoModelo.buscar([], ['id']);
+    resposta.agendamento = resultadoConsulta[0];
+    agendamentoModelo = new AgendamentosModelo(resultadoConsulta[0]);
+
+    const carrosModelo = new CarrosModelo({ id: agendamentoModelo.idCarro });
+    resultadoConsulta = await carrosModelo.buscar([], ['id']);
+    resposta.carroSelecionado = resultadoConsulta[0];
+
+    const agendamentoServicosModelo = new AgendamentoServicosModelo({
+      idAgendamento: agendamentoModelo.id,
+    });
+    resultadoConsulta = await agendamentoServicosModelo.buscarParaDetalhes();
+    resposta.servicosSelecionados = resultadoConsulta;
+
+    res.status(200);
+    res.json(resposta);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 router.post('/', async (req, res, next) => {
   try {
     const {

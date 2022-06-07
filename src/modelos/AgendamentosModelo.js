@@ -53,6 +53,10 @@ class AgendamentosModelo {
     return repositorio.buscarParaUsuario(idUsuario);
   }
 
+  buscarParaAdmin() {
+    return repositorio.buscarParaAdmin();
+  }
+
   async atualizar() {
     const campos = [
       'orcamento',

@@ -30,9 +30,24 @@ class AgendamentosRepositorio extends RepositorioBasico {
       SELECT A.*
       FROM agendamentos AS A
       INNER JOIN carros AS C ON C.id = A.idCarro
-      WHERE C.idDono = ?;
+      WHERE C.idDono = ?
+      ORDER BY A.dataMarcada DESC;
     `;
     const resultadoConsulta = await executarConsulta(sql, [idUsuario]);
+    return resultadoConsulta[0];
+  }
+
+  async buscarParaAdmin() {
+    const sql = `
+    SELECT A.*, U.nome AS nomeCliente
+    FROM (( agendamentos AS A 
+            INNER JOIN carros AS C ON A.idCarro = C.id
+          )
+            INNER JOIN usuarios AS U ON C.idDono = U.id
+    )
+    ORDER BY A.dataMarcada DESC;
+    `;
+    const resultadoConsulta = await executarConsulta(sql);
     return resultadoConsulta[0];
   }
 }

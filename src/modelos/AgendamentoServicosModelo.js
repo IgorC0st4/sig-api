@@ -42,6 +42,10 @@ class AgendamentosServicosModelo {
     );
   }
 
+  buscarParaDetalhes() {
+    return repositorio.buscarParaDetalhes(this.idAgendamento);
+  }
+
   validar() {
     const campos = ['idAgendamento', 'idVariacao'];
     campos.forEach((campo) => {

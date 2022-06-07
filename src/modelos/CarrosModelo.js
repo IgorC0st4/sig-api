@@ -73,6 +73,10 @@ class CarrosModelo {
     );
   }
 
+  excluir() {
+    return repositorio.excluir(this.id);
+  }
+
   validar() {
     const campos = ['tamanho', 'cor', 'placa', 'modelo', 'idDono'];
     campos.forEach((campo) => {

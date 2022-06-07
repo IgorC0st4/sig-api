@@ -72,4 +72,17 @@ router.put('/', async (req, res, next) => {
   }
 });
 
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const carrosModelo = new CarrosModelo({ id });
+    await carrosModelo.excluir();
+    res.status(200);
+    res.end();
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 module.exports = router;

@@ -4,9 +4,11 @@ const { OAuth2 } = google.auth;
 const oAuth2Client = new OAuth2(
   process.env.GOOGLE_OAUTH_CLIENT_ID,
   process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+  process.env.GOOGLE_OAUTH_REDIRECT_URI,
 );
 oAuth2Client.setCredentials({
   refresh_token: process.env.GOOGLE_OAUTH_REFRESH_TOKEN,
+  access_token: process.env.GOOGLE_OAUTH_ACCESS_TOKEN,
 });
 
 const calendar = google.calendar({ version: 'v3', auth: oAuth2Client });
