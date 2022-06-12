@@ -38,11 +38,9 @@ router.post('/', async (req, res, next) => {
     const valoresRegistro = req.body;
     const carroModelo = new CarrosModelo(valoresRegistro);
 
-    await carroModelo.inserir();
-    const resultadoConsulta = await carroModelo.buscar([], ['idDono'], 'id', 'DESC', 1);
-    const resposta = resultadoConsulta[0];
+    const resultado = await carroModelo.inserir();
     res.status(201);
-    res.json(resposta);
+    res.json(resultado[0]);
   } catch (error) {
     console.error(error);
     next(error);

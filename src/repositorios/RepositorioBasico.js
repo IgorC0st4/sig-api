@@ -11,7 +11,7 @@ class RepositorioBasico {
       ')',
       'VALUES (',
       valoresWildCards.join(','),
-      ');',
+      ') RETURNING *;',
     ];
     return executarConsulta(sql.join(' '), valores);
   }
@@ -53,8 +53,8 @@ class RepositorioBasico {
     }
 
     sql.push(';');
-    const resultado = await executarConsulta(sql.join(' '), valoresCondicoes);
-    return resultado[0];
+    const { rows } = await executarConsulta(sql.join(' '), valoresCondicoes);
+    return rows;
   }
 
   atualizar(colunas = [], valores = []) {

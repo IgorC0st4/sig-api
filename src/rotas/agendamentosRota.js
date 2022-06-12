@@ -5,7 +5,7 @@ const AgendamentoServicosModelo = require('../modelos/AgendamentoServicosModelo'
 const CarrosModelo = require('../modelos/CarrosModelo');
 const UsuariosModelo = require('../modelos/UsuariosModelo');
 const NaoEncontrado = require('../erros/NaoEncontrado');
-const { listarEventosNoIntervalo, inserirNovoEvento } = require('../google/googleCalendar');
+const { inserirNovoEvento } = require('../google/googleCalendar');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -76,7 +76,6 @@ router.get('/admin', async (req, res, next) => {
   }
 });
 
-// dataMarcada, carro, servicos, orcamento, horasServico
 router.get('/usuario/detalhes', async (req, res, next) => {
   try {
     const {
@@ -132,19 +131,20 @@ router.post('/', async (req, res, next) => {
     descricao.push(`Orçamento: ${orcamento}`);
     descricao.push(`Horas de servico: ${horasServico}`);
     descricao.push(`Telefone: ${usuarioModelo.telefone}`);
-    const resultadoInserirNovoEnvento = await inserirNovoEvento(
+    const resultadoInserirNovoEvento = await inserirNovoEvento(
       inicioDoEvento.toJSDate(),
       fimDoEvento.toJSDate(),
       descricao.join('\n'),
       usuarioModelo.nome,
       { nome: usuarioModelo.nome, email: usuarioModelo.email },
     );
-    const eventoSalvo = resultadoInserirNovoEnvento.data;
+    const eventoSalvo = resultadoInserirNovoEvento.data;
     let agendamentoModelo = new AgendamentosModelo({
       dataMarcada: inicioDoEvento.toJSDate(),
       idCarro: carroSelecionado.id,
       orcamento,
       idEventoCalendario: eventoSalvo.id,
+      horasServico,
     });
 
     await agendamentoModelo.inserir();
@@ -152,7 +152,6 @@ router.post('/', async (req, res, next) => {
     agendamentoModelo = new AgendamentosModelo(resultadoConsultaAgendamento[0]);
 
     const promisses = servicosSelecionados.map((servico) => {
-      console.log(servico);
       const agendamentoServico = new AgendamentoServicosModelo({
         idAgendamento: agendamentoModelo.id,
         idVariacao: servico.idVariacao,

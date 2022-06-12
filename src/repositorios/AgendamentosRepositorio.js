@@ -8,17 +8,19 @@ class AgendamentosRepositorio extends RepositorioBasico {
   }
 
   salvar({
-    orcamento, dataMarcada, idEventoCalendario, idCarro,
+    orcamento, dataMarcada, horasServico, idEventoCalendario, idCarro,
   }) {
     const colunas = [
       'orcamento',
       'dataMarcada',
+      'horasServico',
       'idEventoCalendario',
       'idCarro',
     ];
     const valores = [
       orcamento,
       dataMarcada,
+      horasServico,
       idEventoCalendario,
       idCarro,
     ];

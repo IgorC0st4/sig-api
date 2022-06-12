@@ -38,11 +38,9 @@ router.post('/', async (req, res, next) => {
     const valoresRegistro = req.body;
     const servicoModelo = new ServicosModelo(valoresRegistro);
 
-    await servicoModelo.inserir();
-    const resultadoConsulta = await servicoModelo.buscar([], [], 'id', 'DESC', 1);
-    const resposta = resultadoConsulta[0];
+    const resultado = await servicoModelo.inserir();
     res.status(201);
-    res.json(resposta);
+    res.json(resultado);
   } catch (error) {
     console.error(error);
     next(error);

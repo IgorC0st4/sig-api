@@ -31,8 +31,8 @@ class AgendamentoServicosRepositorio extends RepositorioBasico {
             )
       WHERE A_S.idAgendamento = ?;
     `;
-    const resultado = await executarConsulta(sql, [idAgendamento]);
-    return resultado[0];
+    const { rows } = await executarConsulta(sql, [idAgendamento]);
+    return rows;
   }
 }
 

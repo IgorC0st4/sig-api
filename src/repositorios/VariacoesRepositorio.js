@@ -31,8 +31,8 @@ class VariacoesRepositorio extends RepositorioBasico {
     ON S.id = V.idServico
     WHERE V.tamanho = ?;
     `;
-    const resultado = await executarConsulta(sql, [tamanho]);
-    return resultado[0];
+    const { rows } = await executarConsulta(sql, [tamanho]);
+    return rows;
   }
 }
 

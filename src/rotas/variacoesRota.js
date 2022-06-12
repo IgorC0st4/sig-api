@@ -38,7 +38,6 @@ router.get('/agendamento', async (req, res, next) => {
     const { tamanho } = req.query;
     const variacaoModelo = new VariacoesModelo({ tamanho });
     const resultadoConsulta = await variacaoModelo.buscarParaAgendamento();
-    console.log({ resultadoConsulta });
     res.status(200);
     res.json(resultadoConsulta);
   } catch (error) {

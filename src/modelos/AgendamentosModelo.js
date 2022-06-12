@@ -4,12 +4,13 @@ const SemValores = require('../erros/SemValores');
 
 class AgendamentosModelo {
   constructor({
-    id, orcamento, dataMarcada,
+    id, orcamento, dataMarcada, horasServico,
     idEventoCalendario, situacao, idCarro,
   }) {
     this.id = id;
     this.orcamento = orcamento;
     this.dataMarcada = dataMarcada;
+    this.horasServico = horasServico;
     this.idEventoCalendario = idEventoCalendario;
     this.situacao = situacao;
     this.idCarro = idCarro;
@@ -20,6 +21,7 @@ class AgendamentosModelo {
     const valoresParaSalvar = {
       orcamento: this.orcamento,
       dataMarcada: this.dataMarcada,
+      horasServico: this.horasServico,
       idEventoCalendario: this.idEventoCalendario,
       idCarro: this.idCarro,
     };
@@ -90,7 +92,7 @@ class AgendamentosModelo {
   }
 
   validar() {
-    const campos = ['orcamento', 'dataMarcada', 'idCarro'];
+    const campos = ['orcamento', 'horasServico', 'dataMarcada', 'idCarro'];
     campos.forEach((campo) => {
       const valor = this[campo];
       if (typeof valor === 'string' && valor.trim().length === 0) {

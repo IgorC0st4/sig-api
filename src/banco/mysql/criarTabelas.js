@@ -2,11 +2,11 @@ const executarConsulta = require('./executarConsulta');
 
 const criarTabelaUsuarios = () => {
   const sql = `CREATE TABLE IF NOT EXISTS usuarios (
-        id  SERIAL PRIMARY KEY,
+        id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
         nome VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL UNIQUE,
         senha VARCHAR(255) NOT NULL,
-        tipo VARCHAR(255) DEFAULT 'CLIENTE' NOT NULL,
+        tipo ENUM('CLIENTE','ADMIN') DEFAULT 'CLIENTE' NOT NULL,
         telefone VARCHAR(12) NOT NULL
     );`;
 
@@ -15,8 +15,8 @@ const criarTabelaUsuarios = () => {
 
 const criarTabelaCarros = () => {
   const sql = `CREATE TABLE IF NOT EXISTS carros (
-        id  SERIAL PRIMARY KEY,
-        tamanho VARCHAR(255) NOT NULL,
+        id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+        tamanho ENUM('PEQUENO','MEDIO', 'GRANDE') NOT NULL,
         cor VARCHAR(30) NOT NULL,
         placa VARCHAR(30) NOT NULL UNIQUE,
         modelo VARCHAR(255) NOT NULL,
@@ -32,7 +32,7 @@ const criarTabelaCarros = () => {
 
 const criarTabelaServicos = () => {
   const sql = `CREATE TABLE IF NOT EXISTS servicos (
-        id  SERIAL PRIMARY KEY,
+        id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
         nome VARCHAR(50) NOT NULL,
         duracao INT NOT NULL
     );`;
@@ -42,9 +42,9 @@ const criarTabelaServicos = () => {
 
 const criarTabelaVariacoes = () => {
   const sql = `CREATE TABLE IF NOT EXISTS variacoes (
-        id  SERIAL PRIMARY KEY,
+        id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
         valor FLOAT NOT NULL,
-        tamanho VARCHAR(255) NOT NULL,
+        tamanho ENUM('PEQUENO','MEDIO', 'GRANDE') NOT NULL,
         idServico INT NOT NULL,
         FOREIGN KEY (idServico) 
             REFERENCES servicos (id) 
@@ -57,10 +57,10 @@ const criarTabelaVariacoes = () => {
 
 const criarTabelaAgendamentos = () => {
   const sql = `CREATE TABLE IF NOT EXISTS agendamentos (
-        id  SERIAL PRIMARY KEY,
+        id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
         orcamento FLOAT NOT NULL,
-        dataMarcada DATE NOT NULL,
-        situacao VARCHAR(255) DEFAULT 'MARCADO' NOT NULL,
+        dataMarcada DATETIME NOT NULL,
+        situacao ENUM('MARCADO','FINALIZADO', 'CANCELADO') DEFAULT 'MARCADO' NOT NULL,
         horasServico INT NOT NULL,
         idEventoCalendario VARCHAR(255) NOT NULL UNIQUE,
         idCarro INT NOT NULL,
@@ -75,7 +75,7 @@ const criarTabelaAgendamentos = () => {
 
 const criarTabelaAgendamentoServicos = () => {
   const sql = `CREATE TABLE IF NOT EXISTS agendamento_servicos (
-        id  SERIAL PRIMARY KEY,
+        id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
         idAgendamento INT NOT NULL,
         idVariacao INT NOT NULL,
         FOREIGN KEY (idAgendamento) 
