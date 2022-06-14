@@ -3,14 +3,14 @@ require('dotenv/config');
 const criarTabelas = require('./src/banco/criarTabelas');
 const servidor = require('./src/config/servidor');
 
-const { PORTA } = process.env;
+const { PORT } = process.env;
 
 console.log('CRIANDO TABELAS');
 criarTabelas()
   .then(() => {
     console.log('TABELAS CRIADAS COM SUCESSO');
-    servidor.listen(PORTA, () => {
-      console.log(`SERVIDOR ONLINE NA PORTA ${PORTA}`);
+    servidor.listen(PORT, () => {
+      console.log(`SERVIDOR ONLINE NA PORTA ${PORT}`);
     });
   }).catch((error) => {
     console.error('ERRO AO INICIAR SERVIDOR');
