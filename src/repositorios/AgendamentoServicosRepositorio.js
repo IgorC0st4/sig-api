@@ -29,7 +29,7 @@ class AgendamentoServicosRepositorio extends RepositorioBasico {
             )
               INNER JOIN servicos AS S ON V.idServico = S.id
             )
-      WHERE A_S.idAgendamento = ?;
+      WHERE A_S.idAgendamento = $1;
     `;
     const { rows } = await executarConsulta(sql, [idAgendamento]);
     return rows;

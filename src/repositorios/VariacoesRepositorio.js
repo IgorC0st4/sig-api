@@ -29,7 +29,7 @@ class VariacoesRepositorio extends RepositorioBasico {
     FROM servicos AS S
     INNER JOIN variacoes AS V
     ON S.id = V.idServico
-    WHERE V.tamanho = ?;
+    WHERE V.tamanho = $1;
     `;
     const { rows } = await executarConsulta(sql, [tamanho]);
     return rows;

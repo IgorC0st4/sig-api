@@ -32,7 +32,7 @@ class AgendamentosRepositorio extends RepositorioBasico {
       SELECT A.*
       FROM agendamentos AS A
       INNER JOIN carros AS C ON C.id = A.idCarro
-      WHERE C.idDono = ?
+      WHERE C.idDono = $1
       ORDER BY A.dataMarcada DESC;
     `;
     const resultadoConsulta = await executarConsulta(sql, [idUsuario]);

@@ -2,7 +2,10 @@ const executarConsulta = require('../banco/executarConsulta');
 
 class RepositorioBasico {
   async inserir(colunas = [], valores = []) {
-    const valoresWildCards = Array.from('?'.repeat(valores.length));
+    const valoresWildCards = [];
+    valores.forEach((valor, index) => {
+      valoresWildCards.push(`$${index + 1}`);
+    });
     const sql = [
       'INSERT INTO',
       this.nomeTabela,
@@ -36,7 +39,7 @@ class RepositorioBasico {
     sql.push(this.nomeTabela);
 
     if (colunasCondicoes.length > 0) {
-      const condicoesWildCards = colunasCondicoes.map((coluna) => `${coluna}=?`);
+      const condicoesWildCards = colunasCondicoes.map((coluna, index) => `${coluna}=$${index + 1}`);
       sql.push('WHERE');
       sql.push(condicoesWildCards.join(' AND '));
     }
@@ -58,13 +61,13 @@ class RepositorioBasico {
   }
 
   atualizar(colunas = [], valores = []) {
-    const setWildCards = colunas.map((coluna) => `${coluna}=?`);
+    const setWildCards = colunas.map((coluna, index) => `${coluna}=$${index + 1}`);
     const sql = [
       'UPDATE',
       this.nomeTabela,
       'SET',
       setWildCards.join(', '),
-      'WHERE id = ?;',
+      `WHERE id = $${valores.length + 1};`,
     ];
     return executarConsulta(sql.join(' '), valores);
   }
@@ -73,7 +76,7 @@ class RepositorioBasico {
     const sql = [
       'DELETE FROM',
       this.nomeTabela,
-      'WHERE id = ?;',
+      'WHERE id = $1;',
     ];
 
     return executarConsulta(sql.join(' '), [id]);
