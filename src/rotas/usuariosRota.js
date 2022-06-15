@@ -42,7 +42,8 @@ router.post('/registrar', async (req, res, next) => {
     const valoresRegistro = req.body;
     const usuarioModelo = new UsuariosModelo(valoresRegistro);
 
-    const resultado = await usuarioModelo.inserir();
+    await usuarioModelo.inserir();
+    const resultado = await usuarioModelo.buscar([], ['email']);
     res.status(201);
     res.json(Object.assign(resultado[0], { senha: '' }));
   } catch (error) {

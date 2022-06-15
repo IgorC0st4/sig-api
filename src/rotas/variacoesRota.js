@@ -52,10 +52,8 @@ router.post('/', async (req, res, next) => {
     const variacaoModelo = new VariacoesModelo(valoresRegistro);
 
     await variacaoModelo.inserir();
-    const resultadoConsulta = await variacaoModelo.buscar([], ['idServico'], 'id', 'DESC', 1);
-    const resposta = resultadoConsulta[0];
     res.status(201);
-    res.json(resposta);
+    res.end();
   } catch (error) {
     console.error(error);
     next(error);

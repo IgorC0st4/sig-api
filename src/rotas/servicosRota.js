@@ -38,9 +38,9 @@ router.post('/', async (req, res, next) => {
     const valoresRegistro = req.body;
     const servicoModelo = new ServicosModelo(valoresRegistro);
 
-    const resultado = await servicoModelo.inserir();
+    await servicoModelo.inserir();
     res.status(201);
-    res.json(resultado);
+    res.end();
   } catch (error) {
     console.error(error);
     next(error);

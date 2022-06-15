@@ -11,7 +11,7 @@ class RepositorioBasico {
       ')',
       'VALUES (',
       valoresWildCards.join(','),
-      ') RETURNING *;',
+      ');',
     ];
     return executarConsulta(sql.join(' '), valores);
   }
