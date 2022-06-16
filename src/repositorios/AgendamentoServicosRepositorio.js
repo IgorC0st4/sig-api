@@ -8,30 +8,30 @@ class AgendamentoServicosRepositorio extends RepositorioBasico {
   }
 
   salvar({
-    idAgendamento, idVariacao,
+    idagendamento, idvariacao,
   }) {
     const colunas = [
-      'idAgendamento',
-      'idVariacao',
+      'idagendamento',
+      'idvariacao',
     ];
     const valores = [
-      idAgendamento,
-      idVariacao,
+      parseInt(idagendamento, 10),
+      parseInt(idvariacao, 10),
     ];
     return this.inserir(colunas, valores);
   }
 
-  async buscarParaDetalhes(idAgendamento) {
+  async buscarParaDetalhes(idagendamento) {
     const sql = `
       SELECT V.valor, S.nome, S.duracao
       FROM (( agendamento_servicos AS A_S 
-              INNER JOIN variacoes AS V ON A_S.idVariacao = V.id
+              INNER JOIN variacoes AS V ON A_S.idvariacao = V.id
             )
-              INNER JOIN servicos AS S ON V.idServico = S.id
+              INNER JOIN servicos AS S ON V.idservico = S.id
             )
-      WHERE A_S.idAgendamento = $1;
+      WHERE A_S.idagendamento = $1;
     `;
-    const { rows } = await executarConsulta(sql, [idAgendamento]);
+    const { rows } = await executarConsulta(sql, [parseInt(idagendamento, 10)]);
     return rows;
   }
 }

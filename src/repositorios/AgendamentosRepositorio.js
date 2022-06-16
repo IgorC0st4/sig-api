@@ -8,21 +8,21 @@ class AgendamentosRepositorio extends RepositorioBasico {
   }
 
   salvar({
-    orcamento, dataMarcada, horasServico, idEventoCalendario, idCarro,
+    orcamento, datamarcada, horasservico, ideventocalendario, idcarro,
   }) {
     const colunas = [
       'orcamento',
-      'dataMarcada',
-      'horasServico',
-      'idEventoCalendario',
-      'idCarro',
+      'datamarcada',
+      'horasservico',
+      'ideventocalendario',
+      'idcarro',
     ];
     const valores = [
       orcamento,
-      dataMarcada,
-      horasServico,
-      idEventoCalendario,
-      idCarro,
+      datamarcada,
+      horasservico,
+      ideventocalendario,
+      parseInt(idcarro, 10),
     ];
     return this.inserir(colunas, valores);
   }
@@ -31,26 +31,26 @@ class AgendamentosRepositorio extends RepositorioBasico {
     const sql = `
       SELECT A.*
       FROM agendamentos AS A
-      INNER JOIN carros AS C ON C.id = A.idCarro
-      WHERE C.idDono = $1
-      ORDER BY A.dataMarcada DESC;
+      INNER JOIN carros AS C ON C.id = A.idcarro
+      WHERE C.iddono = $1
+      ORDER BY A.datamarcada DESC;
     `;
-    const resultadoConsulta = await executarConsulta(sql, [idUsuario]);
-    return resultadoConsulta[0];
+    const { rows } = await executarConsulta(sql, [idUsuario]);
+    return rows;
   }
 
   async buscarParaAdmin() {
     const sql = `
     SELECT A.*, U.nome AS nomeCliente
     FROM (( agendamentos AS A 
-            INNER JOIN carros AS C ON A.idCarro = C.id
+            INNER JOIN carros AS C ON A.idcarro = C.id
           )
-            INNER JOIN usuarios AS U ON C.idDono = U.id
+            INNER JOIN usuarios AS U ON C.iddono = U.id
     )
-    ORDER BY A.dataMarcada DESC;
+    ORDER BY A.datamarcada DESC;
     `;
-    const resultadoConsulta = await executarConsulta(sql);
-    return resultadoConsulta[0];
+    const { rows } = await executarConsulta(sql);
+    return rows;
   }
 }
 

@@ -20,8 +20,8 @@ const criarTabelaCarros = () => {
         cor VARCHAR(30) NOT NULL,
         placa VARCHAR(30) NOT NULL UNIQUE,
         modelo VARCHAR(255) NOT NULL,
-        idDono INT NOT NULL,
-        FOREIGN KEY (idDono) 
+        iddono INT NOT NULL,
+        FOREIGN KEY (iddono) 
             REFERENCES usuarios (id) 
             ON DELETE CASCADE 
             ON UPDATE CASCADE
@@ -45,8 +45,8 @@ const criarTabelaVariacoes = () => {
         id  SERIAL PRIMARY KEY,
         valor FLOAT NOT NULL,
         tamanho VARCHAR(255) NOT NULL,
-        idServico INT NOT NULL,
-        FOREIGN KEY (idServico) 
+        idservico INT NOT NULL,
+        FOREIGN KEY (idservico) 
             REFERENCES servicos (id) 
             ON DELETE CASCADE 
             ON UPDATE CASCADE
@@ -59,12 +59,12 @@ const criarTabelaAgendamentos = () => {
   const sql = `CREATE TABLE IF NOT EXISTS agendamentos (
         id  SERIAL PRIMARY KEY,
         orcamento FLOAT NOT NULL,
-        dataMarcada DATE NOT NULL,
+        datamarcada DATE NOT NULL,
         situacao VARCHAR(255) DEFAULT 'MARCADO' NOT NULL,
-        horasServico INT NOT NULL,
-        idEventoCalendario VARCHAR(255) NOT NULL UNIQUE,
-        idCarro INT NOT NULL,
-        FOREIGN KEY (idCarro) 
+        horasservico INT NOT NULL,
+        ideventocalendario VARCHAR(255) NOT NULL UNIQUE,
+        idcarro INT NOT NULL,
+        FOREIGN KEY (idcarro) 
             REFERENCES carros (id) 
             ON DELETE CASCADE 
             ON UPDATE CASCADE
@@ -76,13 +76,13 @@ const criarTabelaAgendamentos = () => {
 const criarTabelaAgendamentoServicos = () => {
   const sql = `CREATE TABLE IF NOT EXISTS agendamento_servicos (
         id  SERIAL PRIMARY KEY,
-        idAgendamento INT NOT NULL,
-        idVariacao INT NOT NULL,
-        FOREIGN KEY (idAgendamento) 
+        idagendamento INT NOT NULL,
+        idvariacao INT NOT NULL,
+        FOREIGN KEY (idagendamento) 
             REFERENCES agendamentos (id) 
             ON DELETE CASCADE 
             ON UPDATE CASCADE,
-        FOREIGN KEY (idVariacao) 
+        FOREIGN KEY (idvariacao) 
             REFERENCES variacoes (id) 
             ON DELETE CASCADE 
             ON UPDATE CASCADE

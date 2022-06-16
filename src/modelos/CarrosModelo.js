@@ -4,14 +4,14 @@ const SemValores = require('../erros/SemValores');
 
 class CarrosModelo {
   constructor({
-    id, tamanho, cor, placa, modelo, idDono,
+    id, tamanho, cor, placa, modelo, iddono,
   }) {
     this.id = id;
     this.tamanho = tamanho;
     this.cor = cor;
     this.placa = placa;
     this.modelo = modelo;
-    this.idDono = idDono;
+    this.iddono = iddono;
   }
 
   async inserir() {
@@ -21,7 +21,7 @@ class CarrosModelo {
       cor: this.cor,
       placa: this.placa,
       modelo: this.modelo,
-      idDono: this.idDono,
+      iddono: this.iddono,
     };
     return repositorio.salvar(valoresParaSalvar);
   }
@@ -78,7 +78,7 @@ class CarrosModelo {
   }
 
   validar() {
-    const campos = ['tamanho', 'cor', 'placa', 'modelo', 'idDono'];
+    const campos = ['tamanho', 'cor', 'placa', 'modelo', 'iddono'];
     campos.forEach((campo) => {
       const valor = this[campo];
       if (typeof valor === 'string' && valor.trim().length === 0) {

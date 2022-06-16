@@ -8,27 +8,27 @@ class VariacoesRepositorio extends RepositorioBasico {
   }
 
   salvar({
-    valor, tamanho, idServico,
+    valor, tamanho, idservico,
   }) {
     const colunas = [
       'valor',
       'tamanho',
-      'idServico',
+      'idservico',
     ];
     const valores = [
       valor,
       tamanho,
-      idServico,
+      parseInt(idservico, 10),
     ];
     return this.inserir(colunas, valores);
   }
 
   async buscarParaAgendamento(tamanho) {
     const sql = `
-    SELECT S.nome AS nomeServico, S.duracao AS duracaoServico, V.id AS idVariacao, V.valor
+    SELECT S.nome AS nomeServico, S.duracao AS duracaoServico, V.id AS idvariacao, V.valor
     FROM servicos AS S
     INNER JOIN variacoes AS V
-    ON S.id = V.idServico
+    ON S.id = V.idservico
     WHERE V.tamanho = $1;
     `;
     const { rows } = await executarConsulta(sql, [tamanho]);

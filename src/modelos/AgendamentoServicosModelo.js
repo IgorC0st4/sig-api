@@ -3,18 +3,18 @@ const CampoInvalido = require('../erros/CampoInvalido');
 
 class AgendamentosServicosModelo {
   constructor({
-    id, idAgendamento, idVariacao,
+    id, idagendamento, idvariacao,
   }) {
     this.id = id;
-    this.idAgendamento = idAgendamento;
-    this.idVariacao = idVariacao;
+    this.idagendamento = idagendamento;
+    this.idvariacao = idvariacao;
   }
 
   async inserir() {
     this.validar();
     const valoresParaSalvar = {
-      idAgendamento: this.idAgendamento,
-      idVariacao: this.idVariacao,
+      idagendamento: this.idagendamento,
+      idvariacao: this.idvariacao,
     };
     return repositorio.salvar(valoresParaSalvar);
   }
@@ -43,11 +43,11 @@ class AgendamentosServicosModelo {
   }
 
   buscarParaDetalhes() {
-    return repositorio.buscarParaDetalhes(this.idAgendamento);
+    return repositorio.buscarParaDetalhes(this.idagendamento);
   }
 
   validar() {
-    const campos = ['idAgendamento', 'idVariacao'];
+    const campos = ['idagendamento', 'idvariacao'];
     campos.forEach((campo) => {
       const valor = this[campo];
       if (typeof valor !== 'number' || valor <= 0) {

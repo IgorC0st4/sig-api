@@ -46,7 +46,6 @@ router.get('/usuario', async (req, res, next) => {
 
     const agendamentoModelo = new AgendamentosModelo({});
     const resultadoConsulta = await agendamentoModelo.buscarParaUsuario(idUsuario);
-
     res.status(200);
     if (!resultadoConsulta) {
       res.json([]);
@@ -79,21 +78,21 @@ router.get('/admin', async (req, res, next) => {
 router.get('/usuario/detalhes', async (req, res, next) => {
   try {
     const {
-      idAgendamento,
+      idagendamento,
     } = req.query;
 
     const resposta = {};
-    let agendamentoModelo = new AgendamentosModelo({ id: idAgendamento });
+    let agendamentoModelo = new AgendamentosModelo({ id: idagendamento });
     let resultadoConsulta = await agendamentoModelo.buscar([], ['id']);
     resposta.agendamento = resultadoConsulta[0];
     agendamentoModelo = new AgendamentosModelo(resultadoConsulta[0]);
 
-    const carrosModelo = new CarrosModelo({ id: agendamentoModelo.idCarro });
+    const carrosModelo = new CarrosModelo({ id: agendamentoModelo.idcarro });
     resultadoConsulta = await carrosModelo.buscar([], ['id']);
     resposta.carroSelecionado = resultadoConsulta[0];
 
     const agendamentoServicosModelo = new AgendamentoServicosModelo({
-      idAgendamento: agendamentoModelo.id,
+      idagendamento: agendamentoModelo.id,
     });
     resultadoConsulta = await agendamentoServicosModelo.buscarParaDetalhes();
     resposta.servicosSelecionados = resultadoConsulta;
@@ -113,10 +112,10 @@ router.post('/', async (req, res, next) => {
       carroSelecionado,
       servicosSelecionados,
       orcamento,
-      horasServico,
+      horasservico,
     } = req.body;
 
-    let usuarioModelo = new UsuariosModelo({ id: carroSelecionado.idDono });
+    let usuarioModelo = new UsuariosModelo({ id: carroSelecionado.iddono });
     const resultadoConsulta = await usuarioModelo.buscar([], ['id']);
     usuarioModelo = new UsuariosModelo(resultadoConsulta[0]);
     const tempData = new Date(dataSelecionada);
@@ -126,10 +125,10 @@ router.post('/', async (req, res, next) => {
       .plus({ hours: 8 });
     const fimDoEvento = DateTime
       .fromJSDate(inicioDoEvento.toJSDate())
-      .plus({ hours: horasServico });
-    const descricao = servicosSelecionados.map((servico) => servico.nomeServico);
+      .plus({ hours: horasservico });
+    const descricao = servicosSelecionados.map((servico) => servico.nomeservico);
     descricao.push(`Orçamento: ${orcamento}`);
-    descricao.push(`Horas de servico: ${horasServico}`);
+    descricao.push(`Horas de servico: ${horasservico}`);
     descricao.push(`Telefone: ${usuarioModelo.telefone}`);
     const resultadoInserirNovoEvento = await inserirNovoEvento(
       inicioDoEvento.toJSDate(),
@@ -140,21 +139,21 @@ router.post('/', async (req, res, next) => {
     );
     const eventoSalvo = resultadoInserirNovoEvento.data;
     let agendamentoModelo = new AgendamentosModelo({
-      dataMarcada: inicioDoEvento.toJSDate(),
-      idCarro: carroSelecionado.id,
+      datamarcada: inicioDoEvento.toJSDate(),
+      idcarro: carroSelecionado.id,
       orcamento,
-      idEventoCalendario: eventoSalvo.id,
-      horasServico,
+      ideventocalendario: eventoSalvo.id,
+      horasservico,
     });
 
     await agendamentoModelo.inserir();
-    const resultadoConsultaAgendamento = await agendamentoModelo.buscar([], ['idEventoCalendario']);
+    const resultadoConsultaAgendamento = await agendamentoModelo.buscar([], ['ideventocalendario']);
     agendamentoModelo = new AgendamentosModelo(resultadoConsultaAgendamento[0]);
 
     const promisses = servicosSelecionados.map((servico) => {
       const agendamentoServico = new AgendamentoServicosModelo({
-        idAgendamento: agendamentoModelo.id,
-        idVariacao: servico.idVariacao,
+        idagendamento: agendamentoModelo.id,
+        idvariacao: servico.idvariacao,
       });
       return agendamentoServico.inserir();
     });

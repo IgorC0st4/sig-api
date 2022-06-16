@@ -45,8 +45,8 @@ const criarTabelaVariacoes = () => {
         id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
         valor FLOAT NOT NULL,
         tamanho ENUM('PEQUENO','MEDIO', 'GRANDE') NOT NULL,
-        idServico INT NOT NULL,
-        FOREIGN KEY (idServico) 
+        idservico INT NOT NULL,
+        FOREIGN KEY (idservico) 
             REFERENCES servicos (id) 
             ON DELETE CASCADE 
             ON UPDATE CASCADE
@@ -76,13 +76,13 @@ const criarTabelaAgendamentos = () => {
 const criarTabelaAgendamentoServicos = () => {
   const sql = `CREATE TABLE IF NOT EXISTS agendamento_servicos (
         id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-        idAgendamento INT NOT NULL,
-        idVariacao INT NOT NULL,
-        FOREIGN KEY (idAgendamento) 
+        idagendamento INT NOT NULL,
+        idvariacao INT NOT NULL,
+        FOREIGN KEY (idagendamento) 
             REFERENCES agendamentos (id) 
             ON DELETE CASCADE 
             ON UPDATE CASCADE,
-        FOREIGN KEY (idVariacao) 
+        FOREIGN KEY (idvariacao) 
             REFERENCES variacoes (id) 
             ON DELETE CASCADE 
             ON UPDATE CASCADE

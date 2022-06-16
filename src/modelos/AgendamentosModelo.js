@@ -4,26 +4,26 @@ const SemValores = require('../erros/SemValores');
 
 class AgendamentosModelo {
   constructor({
-    id, orcamento, dataMarcada, horasServico,
-    idEventoCalendario, situacao, idCarro,
+    id, orcamento, datamarcada, horasservico,
+    ideventocalendario, situacao, idcarro,
   }) {
     this.id = id;
     this.orcamento = orcamento;
-    this.dataMarcada = dataMarcada;
-    this.horasServico = horasServico;
-    this.idEventoCalendario = idEventoCalendario;
+    this.datamarcada = datamarcada;
+    this.horasservico = horasservico;
+    this.ideventocalendario = ideventocalendario;
     this.situacao = situacao;
-    this.idCarro = idCarro;
+    this.idcarro = idcarro;
   }
 
   async inserir() {
     this.validar();
     const valoresParaSalvar = {
       orcamento: this.orcamento,
-      dataMarcada: this.dataMarcada,
-      horasServico: this.horasServico,
-      idEventoCalendario: this.idEventoCalendario,
-      idCarro: this.idCarro,
+      datamarcada: this.datamarcada,
+      horasservico: this.horasservico,
+      ideventocalendario: this.ideventocalendario,
+      idcarro: this.idcarro,
     };
     return repositorio.salvar(valoresParaSalvar);
   }
@@ -62,7 +62,7 @@ class AgendamentosModelo {
   async atualizar() {
     const campos = [
       'orcamento',
-      'dataMarcada',
+      'datamarcada',
       'situacao',
     ];
 
@@ -92,7 +92,7 @@ class AgendamentosModelo {
   }
 
   validar() {
-    const campos = ['orcamento', 'horasServico', 'dataMarcada', 'idCarro'];
+    const campos = ['orcamento', 'horasservico', 'datamarcada', 'idcarro'];
     campos.forEach((campo) => {
       const valor = this[campo];
       if (typeof valor === 'string' && valor.trim().length === 0) {

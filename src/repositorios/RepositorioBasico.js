@@ -67,7 +67,7 @@ class RepositorioBasico {
       this.nomeTabela,
       'SET',
       setWildCards.join(', '),
-      `WHERE id = $${valores.length + 1};`,
+      `WHERE id = $${valores.length};`,
     ];
     return executarConsulta(sql.join(' '), valores);
   }
@@ -79,7 +79,7 @@ class RepositorioBasico {
       'WHERE id = $1;',
     ];
 
-    return executarConsulta(sql.join(' '), [id]);
+    return executarConsulta(sql.join(' '), [parseInt(id, 10)]);
   }
 }
 
