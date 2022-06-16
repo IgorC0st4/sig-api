@@ -41,11 +41,11 @@ router.get('/', async (req, res, next) => {
 router.get('/usuario', async (req, res, next) => {
   try {
     const {
-      idUsuario,
+      idusuario,
     } = req.query;
 
     const agendamentoModelo = new AgendamentosModelo({});
-    const resultadoConsulta = await agendamentoModelo.buscarParaUsuario(idUsuario);
+    const resultadoConsulta = await agendamentoModelo.buscarParaUsuario(idusuario);
     res.status(200);
     if (!resultadoConsulta) {
       res.json([]);
