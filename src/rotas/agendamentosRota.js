@@ -126,10 +126,21 @@ router.post('/', async (req, res, next) => {
     const fimDoEvento = DateTime
       .fromJSDate(inicioDoEvento.toJSDate())
       .plus({ hours: horasservico });
-    const descricao = servicosSelecionados.map((servico) => servico.nomeservico);
-    descricao.push(`Orçamento: ${orcamento}`);
-    descricao.push(`Horas de servico: ${horasservico}`);
-    descricao.push(`Telefone: ${usuarioModelo.telefone}`);
+    const descricao = [];
+    descricao.push('SERVIÇOS');
+    servicosSelecionados.forEach((servico) => descricao.push(servico.nomeservico));
+    descricao.push('\n');
+
+    descricao.push('CARRO');
+    descricao.push(`Tamanho: ${carroSelecionado.tamanho}`);
+    descricao.push(`Cor: ${carroSelecionado.cor}`);
+    descricao.push(`Modelo: ${carroSelecionado.modelo}`);
+    descricao.push(`Placa: ${carroSelecionado.placa}`);
+    descricao.push('\n');
+
+    descricao.push(`ORÇAMENTO: ${orcamento}`);
+    descricao.push(`HORAS DE SERVIÇO: ${horasservico}`);
+    descricao.push(`TELEFONE: ${usuarioModelo.telefone}`);
     const resultadoInserirNovoEvento = await inserirNovoEvento(
       inicioDoEvento.toJSDate(),
       fimDoEvento.toJSDate(),
